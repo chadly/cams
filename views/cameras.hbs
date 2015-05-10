@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>VLC RTSP</title>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				{{#each cameras}}
+				<div class="col-lg-6">
+					<embed
+						type="application/x-vlc-plugin"
+						pluginspage="http://www.videolan.org"
+						width="640"
+						height="360"
+						target="{{.}}" />
+				</div>
+				{{/each}}
+			</div>
+		</div>
+	</body>
+</html>

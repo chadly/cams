@@ -1,0 +1,19 @@
+{
+  "name": "vlc-rtsp",
+  "version": "1.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chadly/vlc-rtsp.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "body-parser": "^1.12.3",
+    "express": "^4.12.3",
+    "express-handlebars": "^2.0.1",
+    "handlebars": "^3.0.3"
+  }
+}
