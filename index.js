@@ -2,6 +2,7 @@ var express = require("express");
 var exphbs = require("express-handlebars");
 var bodyParser = require("body-parser");
 var cfg = require("./config");
+var avconv = require('avconv');
 
 var app = express();
 
@@ -21,11 +22,26 @@ app.post("/", function (req, res) {
 		res.render("cameras", {
 			cameras: cfg.cameras
 		});
-	} else {	
+	} else {
 		res.render("login", {
 			authError: true
 		});
 	}
+});
+
+app.get("/stream", function(req, res) {
+	var stream = avconv([
+		"-i", cfg.cameras[0],
+		"-vcodec", "copy",
+		"-acodec", "aac",
+		"-strict", "experimental",
+		"-b:a", "32k",
+		"-f", "hls",
+		"pipe:1"
+	]);
+
+	res.setHeader("content-type", "video/mp4");
+	stream.pipe(res);
 });
 
 var server = app.listen(process.env.PORT || 3000, function () {

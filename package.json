@@ -11,6 +11,7 @@
     "start": "node ."
   },
   "dependencies": {
+    "avconv": "^3.0.1",
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
     "express-handlebars": "^2.0.1",
