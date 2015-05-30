@@ -29,7 +29,7 @@ for date in "${dates[@]}" ; do
 	#http://unix.stackexchange.com/a/63820/50868
 
 	for i in *.mkv; do
-        	avconv -i "$i" -r 1/10 -vf scale=-1:240 -vcodec png "thumbs/$i-%002d.png";
+		avconv -i "$i" -r 1/10 -vf scale=-1:240 -vcodec png "thumbs/$i-%002d.png";
 	done
 
 	montage -geometry +4+4 -tile 6x thumbs/*.png preview.png
@@ -37,4 +37,3 @@ for date in "${dates[@]}" ; do
 	rm -rf thumbs
 	cd ..
 done
-
