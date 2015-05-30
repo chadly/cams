@@ -18,8 +18,8 @@ for path in ~/raw/$folder/record/*.mkv ; do
 
 	dates=("${dates[@]}" $date)
 
-	mkdir -p ~/$camName/$date
-	cd ~/$camName/$date
+	mkdir -p ~/processed/$camName/$date
+	cd ~/processed/$camName/$date
 
 	mv $path $time.mkv
 	avconv -i $time.mkv -codec copy $time.mp4
