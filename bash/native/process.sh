@@ -1,9 +1,45 @@
 #!/bin/bash
 
-#http://stackoverflow.com/a/6673798/316108
-mydir=$(dirname "$0") && cd "${mydir}" || exit 1
+folder=$1
+camName=$2
 
-./rename.sh FI9821W_00626E52CB82 front-door
-./rename.sh FI9821W_00626E52CB67 living-room
-./rename.sh FI9805EP_00626E537A4F backyard
-./rename.sh FI9805E_C4D65535806E front-yard
+#http://unix.stackexchange.com/a/84859/50868
+shopt -s nullglob
+
+for path in ~/raw/$folder/record/*.mkv ; do
+	file=$(basename $path)
+
+	#http://stackoverflow.com/a/5257398/316108
+	parts=(${file//_/ })
+
+	#http://www.catonmat.net/blog/bash-one-liners-explained-part-two/
+	date=${parts[1]:0:4}-${parts[1]:4:2}-${parts[1]:6:2}
+	time=${parts[2]:0:2}-${parts[2]:2:2}-${parts[2]:4:2}
+
+	dates=("${dates[@]}" $date)
+
+	mkdir -p ~/processed/$camName/$date
+	cd ~/processed/$camName/$date
+
+	mv $path $time.mkv
+	avconv -i $time.mkv -codec copy $time.mp4
+	rm $time.mkv
+done
+
+#http://superuser.com/a/513153/302579
+dates=($(echo ${dates[@]} | tr ' ' '\n' | sort -u))
+
+for date in "${dates[@]}" ; do
+	cd ~/processed/$camName/$date
+	mkdir -p thumbs
+
+	#http://unix.stackexchange.com/a/63820/50868
+
+	for i in *.mp4; do
+		avconv -i "$i" -r 1/10 -vf scale=-1:240 -vcodec png "thumbs/$i-%002d.png";
+	done
+
+	montage -geometry +4+4 -tile 6x thumbs/*.png preview.png
+
+	rm -rf thumbs
+done
