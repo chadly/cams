@@ -2,6 +2,7 @@
 
 folder=$1
 camName=$2
+mydir=$(dirname "$0") || exit 1
 
 #http://unix.stackexchange.com/a/84859/50868
 shopt -s nullglob
@@ -28,6 +29,8 @@ done
 
 #http://superuser.com/a/513153/302579
 dates=($(echo ${dates[@]} | tr ' ' '\n' | sort -u))
+
+cd $mydir
 
 for date in "${dates[@]}" ; do
 	./generate-preview.sh ~/processed/$camName/$date
