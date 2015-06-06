@@ -17,6 +17,8 @@
     "express-handlebars": "^2.0.1",
     "flummox": "^3.5.2",
     "handlebars": "^3.0.3",
+    "lodash": "^3.9.3",
+    "promise": "^7.0.1",
     "react": "^0.13.3",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.0"

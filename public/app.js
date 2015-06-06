@@ -2,14 +2,15 @@ var Flux = require("flummox").Flux;
 
 var Api = require("./api");
 
-var RecordingsStore = require("./recordings/store");
+var CameraStore = require("./store");
 
 function CameraApp() {
 	Flux.call(this);
 
 	this.api = new Api();
 
-	this.createStore("recordings", RecordingsStore);
+	this.createActions("camera", CameraActions);
+	this.createStore("camera", CameraStore, this);
 }
 
 CameraApp.prototype = Object.create(Flux.prototype);
