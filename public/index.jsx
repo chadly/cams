@@ -1,11 +1,9 @@
 var React = require("react");
-var FluxComponent = require("flummox/component");
-var FluxApp = require("./app");
 
 var app = new FluxApp();
 
 React.render((
-	<FluxComponent flux={app}>
+	<span>
 		Hello, world
-	</FluxComponent>
+	</span>
 ), document.getElementById("react-app"));

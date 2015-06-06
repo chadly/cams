@@ -15,7 +15,6 @@
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
     "express-handlebars": "^2.0.1",
-    "flummox": "^3.5.2",
     "handlebars": "^3.0.3",
     "lodash": "^3.9.3",
     "promise": "^7.0.1",
