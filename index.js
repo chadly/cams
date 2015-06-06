@@ -2,6 +2,7 @@ var express = require("express");
 var cfg = require("./config");
 var fs = require("fs");
 var _ = require("lodash");
+require("./polyfill");
 
 var app = express();
 
@@ -59,7 +60,9 @@ app.get("/cameras/:id/:date", function(req, res) {
 		videos[req.params.date] = [];
 
 		files.forEach(function(file) {
-			videos[req.params.date].push("/recordings/" + cam.id + "/" + req.params.date + "/" + file);
+			if (file.endsWith(".mp4")) {
+				videos[req.params.date].push("/recordings/" + cam.id + "/" + req.params.date + "/" + file);
+			}
 		});
 
 		res.json(_.extend({}, cam, videos));
