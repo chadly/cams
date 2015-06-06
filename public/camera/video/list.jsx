@@ -1,6 +1,8 @@
 var React = require("react");
 var api = require("./../../api");
 
+var VideoPlayer = require("./player");
+
 var VideoList = React.createClass({
 	propTypes: {
 		camera: React.PropTypes.string.isRequired,
@@ -9,11 +11,12 @@ var VideoList = React.createClass({
 	getInitialState: function() {
 		return {
 			videos: [],
-			isLoading: true
+			isLoading: true,
+			playingVideo: null
 		};
 	},
 	componentDidMount: function() {
-		api.getVideos(this.props.camera, this.props.date).then(function(response) {
+		api.getVideos(this.props.camera, this.props.date).done(function(response) {
 			if (this.isMounted()) {
 				this.setState({
 					videos: response.body[this.props.date],
@@ -29,6 +32,11 @@ var VideoList = React.createClass({
 			}
 		}.bind(this));
 	},
+	playVideo: function(videoUrl) {
+		this.setState({
+			playingVideo: videoUrl
+		});
+	},
 	render: function() {
 		if (this.state.isLoading) {
 			return <span>Loading...</span>;
@@ -41,18 +49,12 @@ var VideoList = React.createClass({
 		return (
 			<div className="row">
 				{this.state.videos.map(function(video) {
-					return (
-						<div key={video} className="col-xs-6 col-md-3">
-							<div className="thumbnail">
-								<div className="embed-responsive embed-responsive-16by9">
-									<video class="embed-responsive-item" src={video} controls>
-										Cool video, bro
-									</video>
-								</div>
-							</div>
-						</div>
-					);
-				})}
+					return <VideoPlayer
+						key={video.url}
+						video={video}
+						isPlaying={video.url == this.state.playingVideo}
+						onPlay={this.playVideo} />;
+				}.bind(this))}
 			</div>
 		);
 	}

@@ -11,7 +11,7 @@ var Main = React.createClass({
 		};
 	},
 	componentDidMount: function() {
-		api.getCameras().then(function(response) {
+		api.getCameras().done(function(response) {
 			if (this.isMounted()) {
 				this.setState({
 					cameras: response.body

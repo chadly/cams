@@ -61,7 +61,10 @@ app.get("/cameras/:id/:date", function(req, res) {
 
 		files.forEach(function(file) {
 			if (file.endsWith(".mp4")) {
-				videos[req.params.date].push("/recordings/" + cam.id + "/" + req.params.date + "/" + file);
+				videos[req.params.date].push({
+					url: "/recordings/" + cam.id + "/" + req.params.date + "/" + file,
+					thumbnail: "/recordings/" + cam.id + "/" + req.params.date + "/" + file + ".png",
+				});
 			}
 		});
 
