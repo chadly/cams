@@ -1,7 +1,6 @@
 var React = require("react");
+var Main = require("./main");
 
 React.render((
-	<span>
-		Hello, world
-	</span>
+	<Main />
 ), document.getElementById("react-app"));

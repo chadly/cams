@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "browserify public/index.jsx -t reactify -d -o public/build.js",
+    "build": "browserify public/index.jsx -t reactify --extension=.jsx -d -o public/build.js",
     "start": "npm run build && node ."
   },
   "dependencies": {
