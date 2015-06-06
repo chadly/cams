@@ -11,14 +11,18 @@ var VideoPlayer = React.createClass({
 		this.props.onPlay(this.props.video.url);
 	},
 	render: function() {
+		var content = (
+			<a href={this.props.video.url} onClick={this.playVideo}>
+				<img src={this.props.video.thumbnail} />
+			</a>
+		);
+
 		if (this.props.isPlaying) {
-			return (
-				<div className="col-xs-6 col-md-3">
-					<div className="embed-responsive embed-responsive-16by9">
-						<video className="embed-responsive-item" src={this.props.video.url} controls autoPlay>
-							Cool video, bro
-						</video>
-					</div>
+			content = (
+				<div className="embed-responsive embed-responsive-16by9">
+					<video className="embed-responsive-item" src={this.props.video.url} controls autoPlay>
+						Cool video, bro
+					</video>
 				</div>
 			);
 		}
@@ -26,9 +30,7 @@ var VideoPlayer = React.createClass({
 		return (
 			<div className="col-xs-6 col-md-3">
 				<div className="thumbnail">
-					<a href={this.props.video.url} onClick={this.playVideo}>
-						<img src={this.props.video.thumbnail} />
-					</a>
+					{content}
 				</div>
 			</div>
 		);
