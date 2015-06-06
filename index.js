@@ -1,26 +1,12 @@
 var express = require("express");
-var exphbs = require("express-handlebars");
-var bodyParser = require("body-parser");
 var cfg = require("./config");
 var fs = require("fs");
 var _ = require("lodash");
 
 var app = express();
 
-app.engine('.hbs', exphbs({
-	extname: '.hbs'
-}));
-app.set('view engine', '.hbs');
-
+app.use("/", express.static("public"));
 app.use("/recordings", express.static("/home/chad/cams"));
-
-app.use(bodyParser.urlencoded({
-	extended: false
-}));
-
-app.get("/", function(req, res) {
-	res.render("layout");
-});
 
 app.get("/cameras", function(req, res) {
 	return res.json(cfg.cameras);
