@@ -8,12 +8,21 @@
   },
   "main": "index.js",
   "scripts": {
+    "build": "browserify public/index.jsx -t reactify -d -o public/build.js",
     "start": "node ."
   },
   "dependencies": {
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
     "express-handlebars": "^2.0.1",
-    "handlebars": "^3.0.3"
+    "flummox": "^3.5.2",
+    "handlebars": "^3.0.3",
+    "react": "^0.13.3",
+    "superagent": "^1.2.0",
+    "superagent-promise": "^1.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.3",
+    "reactify": "^1.1.1"
   }
 }
