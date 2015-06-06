@@ -1,5 +1,5 @@
 var React = require("react");
-var api = require("./api");
+var api = require("./../../api");
 
 var VideoList = React.createClass({
 	propTypes: {
@@ -39,17 +39,23 @@ var VideoList = React.createClass({
 		}
 
 		return (
-			<ul className="nav nav-tabs">
-				{this.props.cameras.map(function(cam) {
+			<div className="row">
+				{this.state.videos.map(function(video) {
 					return (
-						<li key={cam.id} role="presentation">
-							<a href={'#' + cam.id}>{cam.name}</a>
-						</li>
+						<div key={video} className="col-xs-6 col-md-3">
+							<div className="thumbnail">
+								<div className="embed-responsive embed-responsive-16by9">
+									<video class="embed-responsive-item" src={video} controls>
+										Cool video, bro
+									</video>
+								</div>
+							</div>
+						</div>
 					);
 				})}
-			</ul>
+			</div>
 		);
 	}
 });
 
-module.exports = CameraTabs;
+module.exports = VideoList;

@@ -2,6 +2,7 @@ var React = require("react");
 var api = require("./api");
 
 var CameraTabs = require("./camera/tabs");
+var VideoList = require("./camera/video/list");
 
 var Main = React.createClass({
 	getInitialState: function() {
@@ -30,7 +31,10 @@ var Main = React.createClass({
 		}
 
 		return (
-			<CameraTabs cameras={this.state.cameras} />
+			<div>
+				<CameraTabs cameras={this.state.cameras} />
+				<VideoList camera="front-door" date="2015-06-05" />
+			</div>
 		);
 	}
 });

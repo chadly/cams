@@ -59,7 +59,7 @@ app.get("/cameras/:id/:date", function(req, res) {
 		videos[req.params.date] = [];
 
 		files.forEach(function(file) {
-			videos[req.params.date].push(file);
+			videos[req.params.date].push("/recordings/" + cam.id + "/" + req.params.date + "/" + file);
 		});
 
 		res.json(_.extend({}, cam, videos));
