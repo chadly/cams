@@ -1,5 +1,7 @@
 var React = require("react");
 var api = require("./../../api");
+var _ = require("lodash");
+var moment = require("moment");
 
 var VideoPlayer = require("./player");
 
@@ -19,7 +21,11 @@ var VideoList = React.createClass({
 		api.getVideos(this.props.camera, this.props.date).done(function(response) {
 			if (this.isMounted()) {
 				this.setState({
-					videos: response.body[this.props.date],
+					videos: response.body[this.props.date].map(function(vid) {
+						return _.extend({}, vid, {
+							time: moment(vid.time)
+						});
+					}),
 					isLoading: false
 				});
 			}

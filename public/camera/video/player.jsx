@@ -28,9 +28,13 @@ var VideoPlayer = React.createClass({
 		}
 
 		return (
-			<div className="col-xs-6 col-md-3">
+			<div className="col-md-3">
 				<div className="thumbnail">
 					{content}
+
+					<div className="caption text-center">
+						<h4>{this.props.video.time.format("h:mm:ss a")}</h4>
+					</div>
 				</div>
 			</div>
 		);
