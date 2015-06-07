@@ -3,7 +3,7 @@ var cfg = require("./config");
 var _ = require("lodash");
 var FileReader = require("./files");
 
-var files = new FileReader("/home/chad/cams");
+var files = new FileReader(cfg.baseDir);
 
 var app = express();
 
