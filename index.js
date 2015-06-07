@@ -7,7 +7,7 @@ var files = new FileReader("/home/chad/cams");
 
 var app = express();
 
-app.use("/", express.static("public"));
+app.use(express.static("public"));
 app.use("/recordings", express.static("/home/chad/cams"));
 
 app.get("/cameras", function(req, res) {
@@ -49,6 +49,13 @@ app.get("/cameras/:id/:date", function(req, res) {
 		});
 	});
 });
+
+//SPA
+app.get("*", function(req, res, next) {
+	req.url = "/";
+	next();
+});
+app.use(express.static("public"));
 
 var server = app.listen(process.env.PORT || 3000, function() {
 	var host = server.address().address;
