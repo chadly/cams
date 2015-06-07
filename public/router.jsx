@@ -1,5 +1,6 @@
 var React = require("react");
 var api = require("./api");
+var page = require("page");
 
 var CameraTabs = require("./camera/tabs");
 var CameraCalendar = require("./camera/calendar");
@@ -8,7 +9,9 @@ var VideoList = require("./camera/video/list");
 var Main = React.createClass({
 	getInitialState: function() {
 		return {
-			cameras:[]
+			cameras:[],
+			selectedCamera: null,
+			selectedDate: null
 		};
 	},
 	componentDidMount: function() {
@@ -25,9 +28,29 @@ var Main = React.createClass({
 				});
 			}
 		}.bind(this));
-	},
-	selectDate: function(date) {
-		console.log(date);
+
+		page("/", function(ctx) {
+			this.setState({
+				selectedCamera: null,
+				selectedDate: null
+			});
+		}.bind(this));
+
+		page("/:camera", function(ctx) {
+			this.setState({
+				selectedCamera: ctx.params.camera,
+				selectedDate: null
+			});
+		}.bind(this));
+
+		page("/:camera/:date", function(ctx) {
+			this.setState({
+				selectedCamera: ctx.params.camera,
+				selectedDate: ctx.params.date
+			});
+		}.bind(this));
+
+		page.start();
 	},
 	render: function() {
 		if (this.state.isErrored) {
@@ -36,8 +59,8 @@ var Main = React.createClass({
 
 		return (
 			<div>
-				<CameraTabs cameras={this.state.cameras} />
-				<CameraCalendar camera="front-door" onDateSelected={this.selectDate} />
+				<CameraTabs cameras={this.state.cameras} selected={this.state.selectedCamera} />
+				<CameraCalendar camera={this.state.selectedCamera} onDateSelected={this.selectDate} />
 			</div>
 		);
 	}

@@ -1,6 +1,6 @@
 var React = require("react");
-var Main = require("./main");
+var Router = require("./router");
 
 React.render((
-	<Main />
+	<Router />
 ), document.getElementById("react-app"));

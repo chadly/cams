@@ -17,6 +17,7 @@
     "jquery": "^2.1.4",
     "lodash": "^3.9.3",
     "moment": "^2.10.3",
+    "page": "^1.6.3",
     "promise": "^7.0.1",
     "react": "^0.13.3",
     "superagent": "^1.2.0",
