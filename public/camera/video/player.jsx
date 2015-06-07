@@ -33,7 +33,7 @@ var VideoPlayer = React.createClass({
 		}
 
 		return (
-			<div className="col-md-3">
+			<div className="col-md-4">
 				<div className="thumbnail">
 					{content}
 
