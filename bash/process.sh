@@ -23,11 +23,6 @@ for path in ~/raw/$folder/record/*.mkv ; do
 	mv $path ~/processed/$camName/$date/$time.mkv
 	avconv -i ~/processed/$camName/$date/$time.mkv -codec copy ~/processed/$camName/$date/$time.mp4
 	rm ~/processed/$camName/$date/$time.mkv
-done
 
-#http://superuser.com/a/513153/302579
-dates=($(echo ${dates[@]} | tr ' ' '\n' | sort -u))
-
-for date in "${dates[@]}" ; do
-	./generate-thumbnails.sh ~/processed/$camName/$date
+	./generate-thumbnail.sh ~/processed/$camName/$date/$time.mp4
 done
