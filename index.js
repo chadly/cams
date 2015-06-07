@@ -68,7 +68,7 @@ app.get("/cameras/:id/:date", function(req, res) {
 				videos[req.params.date].push({
 					time: date,
 					url: "/recordings/" + cam.id + "/" + req.params.date + "/" + file,
-					thumbnail: "/recordings/" + cam.id + "/" + req.params.date + "/" + file + ".png",
+					thumbnail: "/recordings/" + cam.id + "/" + req.params.date + "/" + file.replace(/mp4/, "png"),
 				});
 			}
 		});
