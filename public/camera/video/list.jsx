@@ -21,7 +21,7 @@ var VideoList = React.createClass({
 		api.getVideos(this.props.camera, this.props.date).done(function(response) {
 			if (this.isMounted()) {
 				this.setState({
-					videos: response.body[this.props.date].map(function(vid) {
+					videos: response.body.map(function(vid) {
 						return _.extend({}, vid, {
 							time: moment(vid.time)
 						});

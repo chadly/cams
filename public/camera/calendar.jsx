@@ -18,8 +18,10 @@ var CameraCalendar = React.createClass({
 		api.getCameraDates(this.props.camera).done(function(response) {
 			if (this.isMounted()) {
 				this.setState({
-					dates: response.body.dates.map(function(date) {
-						return moment(date);
+					dates: response.body.map(function(date) {
+						return _.extend({}, date, {
+							date: moment(date.date)
+						});
 					}),
 					isLoading: false
 				});
@@ -45,7 +47,7 @@ var CameraCalendar = React.createClass({
 		return (
 			<select>
 				{this.state.dates.map(function(date) {
-					return <option key={date.format("X")}>{date.format("ddd, MMM Do")}</option>;
+					return <option key={date.date.format("X")}>{date.date.format("ddd, MMM Do")} ({date.videoCount})</option>;
 				})}
 			</select>
 		);

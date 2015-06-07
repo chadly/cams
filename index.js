@@ -1,9 +1,9 @@
 var express = require("express");
 var cfg = require("./config");
-var fs = require("fs");
 var _ = require("lodash");
-var moment = require("moment");
-require("./polyfill");
+var FileReader = require("./files");
+
+var files = new FileReader("/home/chad/cams");
 
 var app = express();
 
@@ -25,17 +25,8 @@ app.get("/cameras/:id", function(req, res) {
 		});
 	}
 
-	fs.readdir("/home/chad/cams/" + cam.id, function(err, files) {
-		if (err) throw err;
-
-		var dates = [];
-		files.forEach(function(file) {
-			dates.push(file);
-		});
-
-		res.json(_.extend({}, cam, {
-			dates: dates
-		}));
+	files.readDates(cam.id).done(function(dates) {
+		res.json(dates);
 	});
 });
 
@@ -50,30 +41,12 @@ app.get("/cameras/:id/:date", function(req, res) {
 		});
 	}
 
-	fs.readdir("/home/chad/cams/" + cam.id + "/" + req.params.date, function(err, files) {
-		if (err) {
-			return res.status(404).json({
-				message: "There are no recordings for camera id '" + req.params.id + "' on date '" + req.params.date + "'."
-			});
-		}
-
-		var videos = {};
-		videos[req.params.date] = [];
-
-		files.forEach(function(file) {
-			if (file.endsWith(".mp4")) {
-				var dateString = req.params.date + " " + file.replace(/.mp4/, "").replace(/-/g, ":");
-				var date = moment(dateString, "YYYY-MM-DD HH:mm:ss");
-
-				videos[req.params.date].push({
-					time: date,
-					url: "/recordings/" + cam.id + "/" + req.params.date + "/" + file,
-					thumbnail: "/recordings/" + cam.id + "/" + req.params.date + "/" + file.replace(/mp4/, "png"),
-				});
-			}
+	files.readVideos(cam.id, req.params.date).then(function(videos) {
+		res.json(videos);
+	}, function(err) {
+		res.status(404).json({
+			message: "There are no recordings for camera id '" + req.params.id + "' on date '" + req.params.date + "'."
 		});
-
-		res.json(_.extend({}, cam, videos));
 	});
 });
 
