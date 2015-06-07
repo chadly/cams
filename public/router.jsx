@@ -57,10 +57,13 @@ var Main = React.createClass({
 			return <span>There was an error loading the cameras.</span>;
 		}
 
+		var calendar = !!this.state.selectedCamera ?
+			<CameraCalendar camera={this.state.selectedCamera} onDateSelected={this.selectDate} /> : null;
+
 		return (
 			<div>
 				<CameraTabs cameras={this.state.cameras} selected={this.state.selectedCamera} />
-				<CameraCalendar camera={this.state.selectedCamera} onDateSelected={this.selectDate} />
+				{calendar}
 			</div>
 		);
 	}

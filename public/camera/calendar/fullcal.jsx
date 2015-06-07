@@ -1,32 +1,23 @@
 var React = require("react");
-require("fullcalendar");
-require("fullcalendar/dist/fullcalendar.css");
-var $ = require("jquery");
 
 var CameraCalendar = React.createClass({
 	propTypes: {
-		dates: React.PropTypes.array.isRequired,
-		onDateSelected: React.PropTypes.func.isRequired
-	},
-	componentDidMount: function() {
-		$(this.refs.calContainer.getDOMNode()).fullCalendar({
-			events: this.props.dates.map(function(date){
-				return {
-					title: date.videoCount + " videos",
-					start: date.date,
-					allDay: true
-				};
-			}),
-			dayClick: function(date) {
-				this.props.onDateSelected(date.format("YYYY-MM-DD"));
-			}.bind(this)
-		});
-	},
-	componentWillUnmount: function() {
-
+		dates: React.PropTypes.array.isRequired
 	},
 	render: function() {
-		return <div ref="calContainer"></div>;
+		return (
+			<ul>
+				{this.props.dates.map(function(date) {
+					var formattedDate = date.date.format("YYYY-MM-DD");
+
+					return (
+						<li key={formattedDate}>
+							<a href={formattedDate}>{date.date.format("ddd, MMM Do YYYY")} ({date.videoCount} videos)</a>
+						</li>
+					);
+				})}
+			</ul>
+		);
 	}
 });
 

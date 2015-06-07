@@ -8,13 +8,11 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "browserify public/index.jsx -t reactify -g cssify --extension=.jsx -d -o public/build.js",
+    "build": "browserify public/index.jsx -t reactify --extension=.jsx -d -o public/build.js",
     "start": "npm run build && node ."
   },
   "dependencies": {
     "express": "^4.12.3",
-    "fullcalendar": "^2.3.1",
-    "jquery": "^2.1.4",
     "lodash": "^3.9.3",
     "moment": "^2.10.3",
     "page": "^1.6.3",
@@ -25,7 +23,6 @@
   },
   "devDependencies": {
     "browserify": "^10.2.3",
-    "cssify": "^0.7.0",
     "reactify": "^1.1.1"
   }
 }

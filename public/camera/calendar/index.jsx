@@ -17,6 +17,13 @@ var CameraCalendar = React.createClass({
 		};
 	},
 	componentDidMount: function() {
+		this.reloadDates();
+	},
+	componentWillReceiveProps: function() {
+		this.reloadDates();
+	},
+	reloadDates: function() {
+		console.log("loading dates");
 		api.getCameraDates(this.props.camera).done(function(response) {
 			if (this.isMounted()) {
 				this.setState({
@@ -47,7 +54,7 @@ var CameraCalendar = React.createClass({
 		}
 
 		return (
-			<FullCalendar dates={this.state.dates} onDateSelected={this.props.onDateSelected} />
+			<FullCalendar dates={this.state.dates} />
 		);
 	}
 });
