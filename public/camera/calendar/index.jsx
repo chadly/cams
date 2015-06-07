@@ -1,17 +1,19 @@
 var React = require("react");
-var api = require("./../api");
+var api = require("./../../api");
 var _ = require("lodash");
 var moment = require("moment");
 
+var FullCalendar = require("./fullcal");
+
 var CameraCalendar = React.createClass({
 	propTypes: {
-		camera: React.PropTypes.string.isRequired
+		camera: React.PropTypes.string.isRequired,
+		onDateSelected: React.PropTypes.func.isRequired
 	},
 	getInitialState: function() {
 		return {
 			dates: [],
-			isLoading: true,
-			selectedDate: null
+			isLoading: true
 		};
 	},
 	componentDidMount: function() {
@@ -45,11 +47,7 @@ var CameraCalendar = React.createClass({
 		}
 
 		return (
-			<select>
-				{this.state.dates.map(function(date) {
-					return <option key={date.date.format("X")}>{date.date.format("ddd, MMM Do")} ({date.videoCount})</option>;
-				})}
-			</select>
+			<FullCalendar dates={this.state.dates} onDateSelected={this.props.onDateSelected} />
 		);
 	}
 });
