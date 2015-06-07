@@ -6,6 +6,12 @@ exports.getCameras = function() {
 		.end();
 };
 
+exports.getCameraDates = function(camera) {
+	return request.get("/cameras/" + camera + "/")
+		.accept("json")
+		.end();
+};
+
 exports.getVideos = function(camera, date) {
 	return request.get("/cameras/" + camera + "/" + date + "/")
 		.accept("json")

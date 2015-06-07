@@ -2,6 +2,7 @@ var React = require("react");
 var api = require("./api");
 
 var CameraTabs = require("./camera/tabs");
+var CameraDates = require("./camera/calendar");
 var VideoList = require("./camera/video/list");
 
 var Main = React.createClass({
@@ -33,6 +34,7 @@ var Main = React.createClass({
 		return (
 			<div>
 				<CameraTabs cameras={this.state.cameras} />
+				<CameraDates camera="front-door" />
 				<VideoList camera="front-door" date="2015-06-05" />
 			</div>
 		);
