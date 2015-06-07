@@ -18,6 +18,7 @@
     "page": "^1.6.3",
     "promise": "^7.0.1",
     "react": "^0.13.3",
+    "react-native-listener": "0.0.6",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.0"
   },

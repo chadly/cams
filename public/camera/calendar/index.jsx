@@ -7,8 +7,7 @@ var FullCalendar = require("./fullcal");
 
 var CameraCalendar = React.createClass({
 	propTypes: {
-		camera: React.PropTypes.string.isRequired,
-		onDateSelected: React.PropTypes.func.isRequired
+		camera: React.PropTypes.string.isRequired
 	},
 	getInitialState: function() {
 		return {
@@ -23,7 +22,6 @@ var CameraCalendar = React.createClass({
 		this.reloadDates();
 	},
 	reloadDates: function() {
-		console.log("loading dates");
 		api.getCameraDates(this.props.camera).done(function(response) {
 			if (this.isMounted()) {
 				this.setState({

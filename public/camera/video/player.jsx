@@ -1,4 +1,5 @@
 var React = require("react");
+var NativeListener = require("react-native-listener");
 
 var VideoPlayer = React.createClass({
 	propTypes: {
@@ -8,13 +9,17 @@ var VideoPlayer = React.createClass({
 	},
 	playVideo: function(ev) {
 		ev.preventDefault();
+		ev.stopPropagation();
+
 		this.props.onPlay(this.props.video.url);
 	},
 	render: function() {
 		var content = (
-			<a href={this.props.video.url} onClick={this.playVideo}>
-				<img src={this.props.video.thumbnail} />
-			</a>
+			<NativeListener onClick={this.playVideo}>
+				<a href={this.props.video.url}>
+					<img src={this.props.video.thumbnail} />
+				</a>
+			</NativeListener>
 		);
 
 		if (this.props.isPlaying) {

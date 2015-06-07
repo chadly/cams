@@ -10,7 +10,7 @@ var CameraTabs = React.createClass({
 				{this.props.cameras.map(function(cam) {
 					return (
 						<li key={cam.id} role="presentation">
-							<a href={'/' + cam.id}>{cam.name}</a>
+							<a href={'/' + cam.id + '/'}>{cam.name}</a>
 						</li>
 					);
 				})}
