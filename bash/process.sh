@@ -29,5 +29,5 @@ done
 dates=($(echo ${dates[@]} | tr ' ' '\n' | sort -u))
 
 for date in "${dates[@]}" ; do
-	./generate-preview.sh ~/processed/$camName/$date
+	./generate-thumbnails.sh ~/processed/$camName/$date
 done

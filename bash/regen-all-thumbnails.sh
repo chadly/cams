@@ -8,6 +8,6 @@ shopt -s nullglob
 
 for path in ~/processed/* ; do
 	for datePath in $path/* ; do
-		./generate-preview.sh $datePath
+		./generate-thumbnails.sh $datePath
 	done
 done
