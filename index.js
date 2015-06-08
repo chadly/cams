@@ -8,7 +8,7 @@ var files = new FileReader(cfg.baseDir);
 var app = express();
 
 app.use(express.static("public"));
-app.use("/recordings", express.static("/home/chad/cams"));
+app.use("/recordings", express.static(cfg.baseDir));
 
 app.get("/cameras", function(req, res) {
 	return res.json(cfg.cameras);
