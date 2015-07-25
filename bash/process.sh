@@ -7,17 +7,6 @@ camName=$2
 shopt -s nullglob
 
 for path in ~/raw/$folder/record/*.mkv ; do
-	#wait for file to be done being written to
-	#http://askubuntu.com/a/14254/266063
-	while :
-	do
-		if ! [[ `lsof | grep $path` ]]
-		then
-			break
-		fi
-		sleep 0.5
-	done
-
 	file=$(basename $path)
 
 	#http://stackoverflow.com/a/5257398/316108
