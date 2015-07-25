@@ -1,13 +1,14 @@
 var express = require("express");
 var cfg = require("./config");
 var _ = require("lodash");
+var path = require("path");
 var FileReader = require("./files");
 
 var files = new FileReader(cfg.baseDir);
 
 var app = express();
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use("/recordings", express.static(cfg.baseDir));
 
 app.get("/cameras", function(req, res) {
@@ -55,9 +56,9 @@ app.get("*", function(req, res, next) {
 	req.url = "/";
 	next();
 });
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
-var server = app.listen(process.env.PORT || 3000, function() {
+var server = app.listen(process.env.PORT || 4000, function() {
 	var host = server.address().address;
 	var port = server.address().port;
 
