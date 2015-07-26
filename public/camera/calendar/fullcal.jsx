@@ -1,4 +1,5 @@
 var React = require("react");
+var _ = require("lodash");
 
 var CameraCalendar = React.createClass({
 	propTypes: {
@@ -7,7 +8,7 @@ var CameraCalendar = React.createClass({
 	render: function() {
 		return (
 			<ul>
-				{this.props.dates.map(function(date) {
+				{_(this.props.dates).reverse().map(function(date) {
 					var formattedDate = date.date.format("YYYY-MM-DD");
 
 					return (

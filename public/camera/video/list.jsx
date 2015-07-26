@@ -54,7 +54,7 @@ var VideoList = React.createClass({
 
 		return (
 			<div className="row">
-				{this.state.videos.map(function(video) {
+				{_(this.state.videos).reverse().map(function(video) {
 					return <VideoPlayer
 						key={video.url}
 						video={video}
