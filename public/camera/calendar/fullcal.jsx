@@ -16,7 +16,7 @@ var CameraCalendar = React.createClass({
 							<a href={formattedDate}>{date.date.format("ddd, MMM Do YYYY")} ({date.videoCount} videos)</a>
 						</li>
 					);
-				})}
+				}).value()}
 			</ul>
 		);
 	}

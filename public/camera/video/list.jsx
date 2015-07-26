@@ -60,7 +60,7 @@ var VideoList = React.createClass({
 						video={video}
 						isPlaying={video.url == this.state.playingVideo}
 						onPlay={this.playVideo} />;
-				}.bind(this))}
+				}.bind(this)).value()}
 			</div>
 		);
 	}
