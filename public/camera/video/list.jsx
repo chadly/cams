@@ -54,13 +54,13 @@ var VideoList = React.createClass({
 
 		return (
 			<div className="row">
-				{_(this.state.videos).reverse().map(function(video) {
+				{this.state.videos.slice().reverse().map(function(video) {
 					return <VideoPlayer
 						key={video.url}
 						video={video}
 						isPlaying={video.url == this.state.playingVideo}
 						onPlay={this.playVideo} />;
-				}.bind(this)).value()}
+				}.bind(this))}
 			</div>
 		);
 	}
