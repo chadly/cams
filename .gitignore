@@ -4,5 +4,6 @@ node_modules
 *.orig
 npm-debug.log
 
+/data
 /config.json
 /public/build.js

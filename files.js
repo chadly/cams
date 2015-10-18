@@ -10,6 +10,11 @@ function FileReader(baseDir) {
 	this.baseDir = baseDir;
 }
 
+FileReader.prototype.readCameras = function() {
+	var self = this;
+	return readdir(this.baseDir);
+};
+
 FileReader.prototype.readDates = function(camera) {
 	var self = this;
 

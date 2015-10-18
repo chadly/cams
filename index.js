@@ -4,7 +4,7 @@ var _ = require("lodash");
 var path = require("path");
 var FileReader = require("./files");
 
-var files = new FileReader(cfg.baseDir);
+var files = new FileReader(path.join(__dirname, cfg.baseDir));
 
 var app = express();
 
@@ -12,37 +12,24 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/recordings", express.static(cfg.baseDir));
 
 app.get("/cameras", function(req, res) {
-	return res.json(cfg.cameras);
+	files.readCameras().done(function(cameras) {
+		res.json(cameras.map(function(cam) {
+			return {
+				id: cam,
+				name: cam
+			}
+		}));
+	});
 });
 
 app.get("/cameras/:id", function(req, res) {
-	var cam = _.find(cfg.cameras, {
-		id: req.params.id
-	});
-
-	if (!cam) {
-		return res.status(404).json({
-			message: "The camera with id '" + req.params.id + "' could not be found."
-		});
-	}
-
-	files.readDates(cam.id).done(function(dates) {
+	files.readDates(req.params.id).done(function(dates) {
 		res.json(dates);
 	});
 });
 
 app.get("/cameras/:id/:date", function(req, res) {
-	var cam = _.find(cfg.cameras, {
-		id: req.params.id
-	});
-
-	if (!cam) {
-		return res.status(404).json({
-			message: "The camera with id '" + req.params.id + "' could not be found."
-		});
-	}
-
-	files.readVideos(cam.id, req.params.date).then(function(videos) {
+	files.readVideos(req.params.id, req.params.date).then(function(videos) {
 		res.json(videos);
 	}, function(err) {
 		res.status(404).json({
@@ -59,8 +46,6 @@ app.get("*", function(req, res, next) {
 app.use(express.static(path.join(__dirname, "public")));
 
 var server = app.listen(process.env.PORT || 3000, function() {
-	var host = server.address().address;
 	var port = server.address().port;
-
-	console.log("Camera app listening at http://%s:%s", host, port);
+	console.log("Camera app listening on port " + port);
 });
