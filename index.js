@@ -4,7 +4,7 @@ var _ = require("lodash");
 var path = require("path");
 var FileReader = require("./files");
 
-var files = new FileReader(path.join(__dirname, cfg.baseDir));
+var files = new FileReader(path.normalize(cfg.baseDir));
 
 var app = express();
 
