@@ -29,12 +29,14 @@ app.post("/cameras", (req, res) => {
 	cmd.stdout.on("data", chunk => output.push(chunk));
 
 	cmd.on("close", code => {
+		files.clearCache();
+
 		if (code !== 0) {
 			res.status(500);
 		}
 
 		res.set("Content-Type", "text/plain").send(Buffer.concat(output));
-	})
+	});
 });
 
 app.get("/cameras/:id", function(req, res) {

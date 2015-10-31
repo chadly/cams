@@ -16,6 +16,10 @@ export default class FileReader {
 		this.baseDir = baseDir;
 	}
 
+	clearCache() {
+		cache.flushAll();
+	}
+
 	readCameras() {
 		var value = cache.get("cameras");
 		if (value === undefined) {
