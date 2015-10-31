@@ -2,6 +2,7 @@ import express from "express";
 import cfg from "./config";
 import path from "path";
 import FileReader from "./files";
+import { spawn } from "child_process";
 
 var files = new FileReader(path.normalize(cfg.baseDir));
 
@@ -19,6 +20,21 @@ app.get("/cameras", function(req, res) {
 			}
 		}));
 	});
+});
+
+app.post("/cameras", (req, res) => {
+	var cmd = spawn(__dirname + "/bash/process-all-cams.sh");
+
+	var output = [];
+	cmd.stdout.on("data", chunk => output.push(chunk));
+
+	cmd.on("close", code => {
+		if (code !== 0) {
+			res.status(500);
+		}
+
+		res.set("Content-Type", "text/plain").send(Buffer.concat(output));
+	})
 });
 
 app.get("/cameras/:id", function(req, res) {

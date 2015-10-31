@@ -17,3 +17,7 @@ exports.getVideos = function(camera, date) {
 		.accept("json")
 		.end();
 };
+
+exports.process = function() {
+	return request.post("/cameras/").end();
+}
