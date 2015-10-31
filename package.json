@@ -4,7 +4,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/chadly/vlc-rtsp.git"
+    "url": "https://github.com/chadly/cams.git"
   },
   "main": "index.js",
   "scripts": {
