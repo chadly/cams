@@ -10,12 +10,12 @@ for cam in ~/processed/*
 do
 	for vidDate in $cam/*
 	do
-		vidDatePath=file=$(basename $vidDate)
+		vidDatePath=$(basename $vidDate)
 		vidNum=`echo "$vidDatePath" | tr -d -`   # remove dashes
 
 		if test "$vidNum" -lt "$threshold"
 		then
-			echo $vidDate
+			rm -rf $vidDate
 		fi
 	done
 done
