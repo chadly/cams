@@ -6,11 +6,12 @@ shopt -s nullglob
 # http://stackoverflow.com/q/11448885
 threshold=`date -d "90 days ago" +%Y%m%d`
 
-for cam in ~/processed
+for cam in ~/processed/*
 do
-	for vidDate in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]
+	for vidDate in $cam/*
 	do
-		vidNum=`echo "$vidDate" | tr -d -`   # remove dashes
+		vidDatePath=file=$(basename $vidDate)
+		vidNum=`echo "$vidDatePath" | tr -d -`   # remove dashes
 
 		if test "$vidNum" -lt "$threshold"
 		then
