@@ -8,7 +8,7 @@ dateToProcess=$4
 #http://unix.stackexchange.com/a/84859/50868
 shopt -s nullglob
 
-for path in $basePath/_raw/$folder/record/alarm_${dateToProcess}_*.mkv ; do
+for path in $basePath/raw/$folder/record/alarm_${dateToProcess}_*.mkv ; do
 	file=$(basename $path)
 
 	#http://stackoverflow.com/a/5257398/316108
@@ -20,16 +20,16 @@ for path in $basePath/_raw/$folder/record/alarm_${dateToProcess}_*.mkv ; do
 
 	dates=("${dates[@]}" $date)
 
-	mkdir -p $basePath/$date/$camName
-	mv $path $basePath/$date/$camName/$time.mkv
+	mkdir -p $basePath/processed/$date/$camName
+	mv $path $basePath/processed/$date/$camName/$time.mkv
 
-	ffmpeg -i $basePath/$date/$camName/$time.mkv -codec copy $basePath/$date/$camName/$time.mp4
+	ffmpeg -i $basePath/processed/$date/$camName/$time.mkv -codec copy $basePath/processed/$date/$camName/$time.mp4
 done
 
-for path in $basePath/$date/$camName/*.mp4 ; do
+for path in $basePath/processed/$date/$camName/*.mp4 ; do
 	mergeStr="$mergeStr +$path"
 done
 
-mkvmerge --generate-chapters when-appending --generate-chapters-name-template '<FILE_NAME>' -o $basePath/$date/$camName.mp4 ${mergeStr:2}
+mkvmerge --generate-chapters when-appending --generate-chapters-name-template '<FILE_NAME>' -o $basePath/processed/$date/$camName.mp4 ${mergeStr:2}
 
-rm -rf $basePath/$date/$camName/
+rm -rf $basePath/processed/$date/$camName/
