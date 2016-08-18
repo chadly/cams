@@ -28,6 +28,7 @@ for path in $basePath/raw/$folder/record/*.mkv ; do
 		mv $path $basePath/processed/$date/.cams/$camName/$time.mkv
 
 		ffmpeg -i $basePath/processed/$date/.cams/$camName/$time.mkv -codec copy $basePath/processed/$date/.cams/$camName/$time.mp4
+		rm $basePath/processed/$date/.cams/$camName/$time.mkv
 	fi	
 done
 
