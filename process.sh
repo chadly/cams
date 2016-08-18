@@ -3,12 +3,14 @@
 folder=$1
 camName=$2
 basePath=$3
-dateToProcess=$4
+
+#http://stackoverflow.com/q/11448885
+threshold=`date -d "5 minutes ago" +%Y%m%d%H%M%S`
 
 #http://unix.stackexchange.com/a/84859/50868
 shopt -s nullglob
 
-for path in $basePath/raw/$folder/record/alarm_${dateToProcess}_*.mkv ; do
+for path in $basePath/raw/$folder/record/*.mkv ; do
 	file=$(basename $path)
 
 	#http://stackoverflow.com/a/5257398/316108
@@ -18,18 +20,15 @@ for path in $basePath/raw/$folder/record/alarm_${dateToProcess}_*.mkv ; do
 	date=${parts[1]:0:4}-${parts[1]:4:2}-${parts[1]:6:2}
 	time=${parts[2]:0:2}:${parts[2]:2:2}:${parts[2]:4:2}
 
-	dates=("${dates[@]}" $date)
+	vidTimestamp=${parts[1]:0:4}${parts[1]:4:2}${parts[1]:6:2}${parts[2]:0:2}${parts[2]:2:2}${parts[2]:4:2}
 
-	mkdir -p $basePath/processed/$date/$camName
-	mv $path $basePath/processed/$date/$camName/$time.mkv
+	if test "$vidTimestamp" -lt "$threshold"
+	then
+		mkdir -p $basePath/processed/$date/.cams/$camName
+		mv $path $basePath/processed/$date/.cams/$camName/$time.mkv
 
-	ffmpeg -i $basePath/processed/$date/$camName/$time.mkv -codec copy $basePath/processed/$date/$camName/$time.mp4
+		ffmpeg -i $basePath/processed/$date/.cams/$camName/$time.mkv -codec copy $basePath/processed/$date/.cams/$camName/$time.mp4
+	fi	
 done
 
-for path in $basePath/processed/$date/$camName/*.mp4 ; do
-	mergeStr="$mergeStr +$path"
-done
-
-mkvmerge --generate-chapters when-appending --generate-chapters-name-template '<FILE_NAME>' -o $basePath/processed/$date/$camName.mp4 ${mergeStr:2}
-
-rm -rf $basePath/processed/$date/$camName/
+./merge.sh $camName $basePath

@@ -1,15 +1,23 @@
 #!/bin/bash -e
 
+basePath=$1
+
 #http://unix.stackexchange.com/a/84859/50868
 shopt -s nullglob
 
 # http://stackoverflow.com/q/11448885
 threshold=`date -d "90 days ago" +%Y%m%d`
+today=`date +%Y%m%d`
 
-for vidDate in ~/*
+for vidDate in $basePath/processed/*
 do
 	vidDatePath=$(basename $vidDate)
 	vidNum=`echo "$vidDatePath" | tr -d -`   # remove dashes
+
+	if test "$vidNum" -lt "$today"
+	then
+		rm -rf $vidDate/.cams
+	fi
 
 	if test "$vidNum" -lt "$threshold"
 	then
