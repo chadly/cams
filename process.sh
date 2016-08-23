@@ -24,9 +24,7 @@ for path in $basePath/raw/$folder/record/*.mkv ; do
 
 	if test "$vidTimestamp" -lt "$threshold"
 	then
-		mkdir -p $basePath/processed/$date/.cams/$camName
-		mv $path $basePath/processed/$date/.cams/$camName/$time.mkv
+		mkdir -p $basePath/processed/$date/$camName
+		mv $path $basePath/processed/$date/$camName/$time.mkv
 	fi	
 done
-
-./merge.sh $camName $basePath

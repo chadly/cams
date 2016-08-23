@@ -1,42 +1,30 @@
 #!/bin/bash -e
 
-camName=$1
-basePath=$2
+folder=$1
+camName=$2
+basePath=$3
 
 #http://unix.stackexchange.com/a/84859/50868
 shopt -s nullglob
 
-for path in $basePath/processed/**/.cams/$camName/*.mkv ; do
-	date=$(basename $(dirname $(dirname $(dirname $path))))
-	dates=("${dates[@]}" $date)
+yesterday=`date -d "1 day ago" +%Y-%m-%d`
+
+stuffToProcess=false
+
+# look for new stuff to merge
+for path in $basePath/processed/$yesterday/$camName/*.mkv ; do
+	stuffToProcess=true
+	mergeStr="$mergeStr +$path"
 done
 
-echo ${dates[@]}
+if [ "$stuffToProcess" = true ]
+then
+	#merge all clips into one mkv
+	mkvmerge --generate-chapters when-appending --generate-chapters-name-template '<FILE_NAME>' -o $basePath/processed/$yesterday/$camName.mkv ${mergeStr:2}
 
-for date in ${dates[@]}; do
-	stuffToProcess=false
+	#remove the clip folder
+	rm -rf $basePath/processed/$yesterday/$camName
 
-	# include stuff that was previously merged
-	for path in $basePath/processed/$date/.cams/$camName/merged/*.mkv ; do
-		mergeStr="$mergeStr +$path"
-	done
-
-	# look for new stuff to merge
-	for path in $basePath/processed/$date/.cams/$camName/*.mkv ; do
-		stuffToProcess=true
-		mergeStr="$mergeStr +$path"
-	done
-
-	if [ "$stuffToProcess" = true ]
-	then
-		mkvmerge --generate-chapters when-appending --generate-chapters-name-template '<FILE_NAME>' -o $basePath/processed/$date/.$camName.mkv ${mergeStr:2}
-
-		#switch out the tmp file for the real one
-		rm -f $basePath/processed/$date/$camName.mkv
-		mv $basePath/processed/$date/.$camName.mkv $basePath/processed/$date/$camName.mkv
-
-		#mark the files as merged
-		mkdir -p $basePath/processed/$date/.cams/$camName/merged
-		mv $basePath/processed/$date/.cams/$camName/* $basePath/processed/$date/.cams/$camName/merged
-	fi
-done
+	#create fast-forwarded summary file
+	ffmpeg -i $basePath/processed/$yesterday/$camName.mkv -map_chapters -1 -filter:v "setpts=0.01*PTS" $basePath/processed/$yesterday/$camName-fast.mkv
+fi
