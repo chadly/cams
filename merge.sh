@@ -1,6 +1,5 @@
 #!/bin/bash -e
 
-folder=$1
 camName=$2
 basePath=$3
 
@@ -24,7 +23,4 @@ then
 
 	#remove the clip folder
 	rm -rf $basePath/processed/$yesterday/$camName
-
-	#create fast-forwarded summary file
-	ffmpeg -i $basePath/processed/$yesterday/$camName.mkv -map_chapters -1 -filter:v "setpts=0.01*PTS" $basePath/processed/$yesterday/$camName-fast.mkv
 fi

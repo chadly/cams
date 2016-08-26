@@ -10,7 +10,7 @@ The Foscams like to dump video onto the FTP server using an esoteric path and fi
 
 ### `all-cams.sh`
 
-This is the entry point and will call either `process.sh` or `merge.sh` depending upon parameters. This is where I map the camera's ID to a user-friendly name (e.g. `FI9805E_C4D65535806E` is `front-door`). This script simply calls `process.sh` or `merge.sh` once for each camera. The first parameter is what script to run while the second parameter is the base directory where the `raw` & `processed` folders live. 
+This is the entry point and will call either `process.sh`, `merge.sh`, or `summary.sh` depending upon parameters. This is where I map the camera's ID to a user-friendly name (e.g. `FI9805E_C4D65535806E` is `front-door`). This script simply calls the specified script once for each camera. The first parameter is what script to run while the second parameter is the base directory where the `raw` & `processed` folders live. 
 
 #### Process All Cameras
 
@@ -30,11 +30,19 @@ It will only process video files that are at least 10 minutes old (based on the 
 ./all-cams.sh merge ~
 ```
 
+Cron runs this script once a day usually around 1am.
+
+This will run `merge.sh` which uses [mkvtoolnix](https://mkvtoolnix.download/) to merge all the separate video clips for the day into one mkv video with different chapter markers for each motion event. So, you end up with a single `2015-10-18` folder with a single mkv file for each camera.
+
+#### Create Summary Video
+
+```
+./all-cams.sh summary ~
+```
+
 Cron runs this script once a day usually around 3am.
 
-This script uses [mkvtoolnix](https://mkvtoolnix.download/) to merge all the separate video clips for the day into one mkv video with different chapter markers for each motion event. So, you end up with a single `2015-10-18` folder with a single mkv file for each camera.
-
-It will also use [ffmpeg](https://ffmpeg.org/) to create a fast motion summary file to quickly be able to view the entire day to look for interesting events.
+This will run `summary.sh` which uses [ffmpeg](https://ffmpeg.org/) to create a fast motion summary file to quickly be able to view the entire day to look for interesting events.
 
 ### `clear-old.sh`
 
