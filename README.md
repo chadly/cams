@@ -8,19 +8,37 @@ I run these bash scripts on a small ubuntu server running on some extra hardware
 
 The Foscams like to dump video onto the FTP server using an esoteric path and filename. e.g. my front door camera will dump video to the following path `FI9805E_C4D65535806E/record/alarm_20151018_093118.mkv` and the Foscam firmware has no way to change that. When you get more than a handful of motion events a day from more than a couple of cameras, this system quickly becomes unmanageable. The scripts process the videos and make them...better.
 
-### `process-all-cams.sh`
+### `all-cams.sh`
 
-This is the entry point and the script that I have cron setup to run every couple of minutes. This is where I map the camera's ID to a user-friendly name (e.g. `FI9805E_C4D65535806E` is `front-door`). This script simply calls `process.sh` once for each camera. It takes a single parameter of the base directory where the `raw` & `processed` folders live. 
+This is the entry point and will call either `process.sh` or `merge.sh` depending upon parameters. This is where I map the camera's ID to a user-friendly name (e.g. `FI9805E_C4D65535806E` is `front-door`). This script simply calls `process.sh` or `merge.sh` once for each camera. The first parameter is what script to run while the second parameter is the base directory where the `raw` & `processed` folders live. 
 
-### `process.sh`
+#### Process All Cameras
 
-This script goes through all the `alarm_[date]_[time].mkv` video files in the camera's `record` folder and reorganizes the files. It creates a folder for the date of the event (e.g. `2015-10-18`) and renames/transcodes the video file to `[time].mp4`. So, `FI9805E_C4D65535806E/record/alarm_20151018_093118.mkv` becomes `2015-10-18/front-door/09-31-18.mp4`. It then uses [mkvtoolnix](https://mkvtoolnix.download/) to merge all the separate videos for the day into one mp4 video with different chapter markers for each motion event. So, you end up with a single `2015-10-18` folder with a single mkv file for each camera.
+```
+./all-cams.sh process ~
+```
 
-It will only process files from 5 minutes ago so as not to accidentally move a file that is still being written by the camera. It keeps track of which files it has merged into a single file and will not delete them.
+Cron runs this script every couple of minutes.
+
+This will run `process.sh` on the current user's home folder. This script goes through all the `alarm_[date]_[time].mkv` video files in the camera's `record` folder and reorganizes the files. It creates a folder for the date of the event (e.g. `2015-10-18`) in `processed` and renames the video file to `[time].mkv`. So, `FI9805E_C4D65535806E/record/alarm_20151018_093118.mkv` becomes `2015-10-18/front-door/09-31-18.mkv`. It also runs the video file through [ffmpeg](https://ffmpeg.org/) to fix inconsistencies that foscam puts in the mkv file that prevent [mkvtoolnix](https://mkvtoolnix.download/) from working on it later.
+
+It will only process video files that are at least 10 minutes old (based on the filename) to avoid working on a file the camera is still writing to disk.
+
+#### Merge Motion Clips
+
+```
+./all-cams.sh merge ~
+```
+
+Cron runs this script once a day usually around 3am.
+
+This script uses [mkvtoolnix](https://mkvtoolnix.download/) to merge all the separate video clips for the day into one mkv video with different chapter markers for each motion event. So, you end up with a single `2015-10-18` folder with a single mkv file for each camera.
+
+It will also use [ffmpeg](https://ffmpeg.org/) to create a fast motion summary file to quickly be able to view the entire day to look for interesting events.
 
 ### `clear-old.sh`
 
-Cron runs this script once a day to clear out any video folders older than 90 days. It will also remove the separate video files for previous days that have already been merged. 
+Cron runs this script once a day to clear out any video folders older than 90 days. 
 
 ## Viewing the Recordings
 
