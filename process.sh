@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 folder=$1
 camName=$2

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 camName=$2
 basePath=$3
