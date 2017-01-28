@@ -22,21 +22,13 @@ This will run `process.sh` on the current user's home folder and is intended to 
 
 It will only process video files that are at least 10 minutes old (based on the filename) to avoid working on a file the camera is still writing to disk.
 
-#### Merge Motion Clips
-
-```
-./all-cams.sh merge ~
-```
-
-This will run `merge.sh` which uses [mkvtoolnix](https://mkvtoolnix.download/) to merge all the separate video clips for the day into one mkv video with different chapter markers for each motion event. So, you end up with a single `2015-10-18` folder with a single mkv file for each camera. The script is intended to be run once a day.
-
 #### Create Summary Video
 
 ```
 ./all-cams.sh summary ~
 ```
 
-This will run `summary.sh` which uses [ffmpeg](https://ffmpeg.org/) to create a fast motion summary file to quickly be able to view the entire day to look for interesting events. The script is intended to be run once a day.
+This will run `summary.sh` which uses [mkvtoolnix](https://mkvtoolnix.download/) to merge all the separate video clips for the day into one mkv video and then uses [ffmpeg](https://ffmpeg.org/) to create a fast motion summary file to quickly be able to view the entire day to look for interesting events. The script is intended to be run once a day.
 
 ### `clear-old.sh`
 
@@ -47,12 +39,11 @@ This will clear out any video folders older than 90 days. The script is intended
 ```
 # m	h	dom	dow	command
 */3	*	*	*	/opt/cams/all-cams.sh process ~
-30	0	*	*	/opt/cams/all-cams.sh merge ~
-00	1	*	*	/opt/cams/all-cams.sh summary ~
+30	0	*	*	/opt/cams/all-cams.sh summary ~
 00	5	*	*	/opt/cams/clear-old.sh ~
 ```
 
-This will run `process.sh` every 3 minutes, `merge.sh` at 12:30am each day, `summary.sh` at 1am each day, and `clear-old.sh` at 5am each day.
+This will run `process.sh` every 3 minutes, `summary.sh` at 12:30am each day, and `clear-old.sh` at 5am each day.
 
 ## Viewing the Recordings
 
