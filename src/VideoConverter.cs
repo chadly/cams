@@ -16,7 +16,7 @@ namespace Cams
 
 		public static bool FastForward(string inputFile, string outputFile)
 		{
-			return Run($"-i {inputFile} -filter:v \"setpts = 0.01 * PTS\" {outputFile}");
+			return Run($"-y -i {inputFile} -filter:v \"setpts = 0.01 * PTS\" {outputFile}");
 		}
 
 		static bool Run(string args)
