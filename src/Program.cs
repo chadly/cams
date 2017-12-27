@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -9,28 +8,18 @@ namespace Cams
 	{
 		static void Main(string[] args)
 		{
-			var cameras = GetCameras(Settings.Path);
-			foreach (var cam in cameras)
-				cam.Process(Settings.Path);
+			string rawDir = Path.Combine(Settings.Path, "raw");
+			string processedDir = Path.Combine(Settings.Path, "processed");
 
-			var dates = GetVideoDates(Settings.Path);
+			var cameras = Directory.GetDirectories(rawDir).Select(p => Camera.FromPath(p));
+			foreach (var cam in cameras)
+				cam.Process(processedDir);
+
+			var dates = Directory.GetDirectories(processedDir).Select(p => new VideoDate(p));
 			foreach (var date in dates)
 				date.Summarize();
 
 			Console.ReadKey();
-		}
-
-		static IEnumerable<Camera> GetCameras(string basePath)
-		{
-			string dir = Path.Combine(basePath, "raw");
-			var paths = Directory.GetDirectories(dir);
-			return paths.Select(p => Camera.FromPath(p));
-		}
-
-		static IEnumerable<VideoDate> GetVideoDates(string basePath)
-		{
-			var paths = Directory.GetDirectories(basePath);
-			return paths.Where(p => new DirectoryInfo(p).Name != "raw").Select(p => new VideoDate(p));
 		}
 	}
 }
