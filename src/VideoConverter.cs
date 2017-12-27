@@ -26,7 +26,7 @@ namespace Cams
 				StartInfo = new ProcessStartInfo
 				{
 					CreateNoWindow = true,
-					FileName = @"D:\Downloads\ffmpeg-20171219-c94b094-win64-static\bin\ffmpeg.exe",
+					FileName = "ffmpeg",
 					Arguments = args
 				}
 			})
