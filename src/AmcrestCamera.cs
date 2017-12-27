@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -81,24 +80,10 @@ namespace Cams
 			string outputDir = new FileInfo(outputFile).DirectoryName;
 			Directory.CreateDirectory(outputDir);
 
-			using (var process = new Process
+			if (!VideoConverter.CodecCopy(file, outputFile))
 			{
-				StartInfo = new ProcessStartInfo
-				{
-					CreateNoWindow = true,
-					FileName = @"D:\Downloads\ffmpeg-20171219-c94b094-win64-static\bin\ffmpeg.exe",
-					Arguments = $"-y -i {file} -codec copy {outputFile}",
-				}
-			})
-			{
-				process.Start();
-				process.WaitForExit();
-
-				if (process.ExitCode != 0)
-				{
-					Console.WriteLine($"Failed to convert {file}");
-					return false;
-				}
+				Console.WriteLine($"Failed to convert {file}");
+				return false;
 			}
 
 			//cleanup

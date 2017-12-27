@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace Cams
@@ -97,24 +96,10 @@ namespace Cams
 
 		bool MergeFilesForSummary(string camName, string summaryFile, string outputFile)
 		{
-			using (var process = new Process
+			if (!VideoConverter.Concat(summaryFile, outputFile))
 			{
-				StartInfo = new ProcessStartInfo
-				{
-					CreateNoWindow = true,
-					FileName = @"D:\Downloads\ffmpeg-20171219-c94b094-win64-static\bin\ffmpeg.exe",
-					Arguments = $"-y -safe 0 -f concat -i {summaryFile} -c copy {outputFile}",
-				}
-			})
-			{
-				process.Start();
-				process.WaitForExit();
-
-				if (process.ExitCode != 0)
-				{
-					Console.WriteLine($"Failed to summarize {camName} for {Date.ToString("yyyy-MM-dd")}");
-					return false;
-				}
+				Console.WriteLine($"Failed to summarize {camName} for {Date.ToString("yyyy-MM-dd")}");
+				return false;
 			}
 
 			return true;
@@ -122,24 +107,10 @@ namespace Cams
 
 		bool FastForwardSummaryFile(string camName, string mergedFile, string outputFile)
 		{
-			using (var process = new Process
+			if (!VideoConverter.FastForward(mergedFile, outputFile))
 			{
-				StartInfo = new ProcessStartInfo
-				{
-					CreateNoWindow = true,
-					FileName = @"D:\Downloads\ffmpeg-20171219-c94b094-win64-static\bin\ffmpeg.exe",
-					Arguments = $"-i {mergedFile} -filter:v \"setpts = 0.01 * PTS\" {outputFile}",
-				}
-			})
-			{
-				process.Start();
-				process.WaitForExit();
-
-				if (process.ExitCode != 0)
-				{
-					Console.WriteLine($"Failed to summarize {camName} for {Date.ToString("yyyy-MM-dd")}");
-					return false;
-				}
+				Console.WriteLine($"Failed to summarize {camName} for {Date.ToString("yyyy-MM-dd")}");
+				return false;
 			}
 
 			return true;
