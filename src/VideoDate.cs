@@ -42,6 +42,8 @@ namespace Cams
 
 						if (CreateSummaryFile(camDir, summaryFile))
 						{
+							Console.WriteLine($"Summarizing {camName} for {Date.ToString("yyyy-MM-dd")}");
+
 							if (MergeFilesForSummary(camName, summaryFile, tmpMergedFile))
 							{
 								if (FastForwardSummaryFile(camName, tmpMergedFile, outputFile))
@@ -61,11 +63,12 @@ namespace Cams
 
 		bool DeleteIfOld()
 		{
-			DateTime threshold = DateTime.Now.AddDays(-90).Date;
+			DateTime threshold = DateTime.Now.AddDays(-Settings.DaysToKeep).Date;
 
 			if (Date < threshold)
 			{
 				Directory.Delete(DirPath, true);
+				Console.WriteLine($"Cleared old videos: {Date.ToString("yyyy-MM-dd")}");
 				return true;
 			}
 

@@ -34,7 +34,7 @@ namespace Cams
 			int second = int.Parse(match.Groups[6].Value);
 			DateTime date = new DateTime(year, month, day, hour, minute, second);
 
-			DateTime threshold = DateTime.Now.AddMinutes(-5);
+			DateTime threshold = DateTime.Now.AddMinutes(Settings.MinutesToWaitBeforeProcessing);
 
 			if (date >= threshold)
 			{

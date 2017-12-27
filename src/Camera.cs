@@ -15,7 +15,7 @@ namespace Cams
 
 			Camera cam = isAmcrest ? new AmcrestCamera() : (Camera)new FoscamCamera();
 
-			cam.Name = d.Name;
+			cam.Name = Settings.MapCameraName(d.Name);
 			cam.RawFilePath = path;
 			return cam;
 		}

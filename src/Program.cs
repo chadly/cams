@@ -9,13 +9,11 @@ namespace Cams
 	{
 		static void Main(string[] args)
 		{
-			string path = args[0];
-
-			var cameras = GetCameras(path);
+			var cameras = GetCameras(Settings.Path);
 			foreach (var cam in cameras)
-				cam.Process(path);
+				cam.Process(Settings.Path);
 
-			var dates = GetVideoDates(path);
+			var dates = GetVideoDates(Settings.Path);
 			foreach (var date in dates)
 				date.Summarize();
 
