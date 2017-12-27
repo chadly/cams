@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "cams": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\dev\\cams\\samples"
+    }
+  }
+}
