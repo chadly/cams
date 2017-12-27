@@ -77,7 +77,7 @@ namespace Cams
 		bool CreateSummaryFile(string camDir, string summaryFilePath)
 		{
 			var files = Directory.GetFiles(camDir, "*.mp4");
-			if (files.Length < 1)
+			if (files.Length < 2)
 				return false;
 
 			using (var summaryFile = File.Open(summaryFilePath, FileMode.Create, FileAccess.Write))
