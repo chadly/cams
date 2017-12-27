@@ -8,12 +8,14 @@ namespace Cams
 	{
 		public override void Process(string outputDir)
 		{
+			Console.WriteLine($"{Name} (Foscam): {RawFilePath}");
+
 			var files = Directory.GetFiles(Path.Combine(RawFilePath, "record"), "*.mkv");
 
 			foreach (string file in files)
-			{
 				ProcessFile(file, outputDir);
-			}
+
+			Console.WriteLine();
 		}
 
 		bool ProcessFile(string file, string outputBase)
