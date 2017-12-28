@@ -1,6 +1,6 @@
 # Cams Post Processing
 
-> An app that post-process recorded surveillance camera footage from Foscam & Amcrest cameras.
+> Post-process recorded surveillance camera footage from Foscam & Amcrest cameras
 
 I run this app every 30 minutes on a small ubuntu server running on some extra hardware I had lying around. I have [Foscam](https://foscam.com/) & [Amcrest](https://amcrest.com/) cameras that record video to the server via FTP whenever they detect motion. The cameras dump everything into the `raw` folder. The app processes & moves the raw footage to date-specific folders.
 
