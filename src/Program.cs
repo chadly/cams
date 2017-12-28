@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 
 namespace Cams
@@ -18,8 +17,6 @@ namespace Cams
 			var dates = Directory.GetDirectories(processedDir).Select(p => new VideoDate(p));
 			foreach (var date in dates)
 				date.Summarize();
-
-			Console.ReadKey();
 		}
 
 		static Camera BuildCamera(string path)
