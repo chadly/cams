@@ -2,7 +2,7 @@
 
 namespace Cams
 {
-	public abstract class VideoFile
+	public class VideoFile
 	{
 		public string FilePath { get; private set; }
 		public DateTime Date { get; private set; }
@@ -12,8 +12,6 @@ namespace Cams
 			FilePath = path;
 			Date = date;
 		}
-
-		public abstract void Cleanup();
 
 		public override string ToString()
 		{

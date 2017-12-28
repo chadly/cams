@@ -11,7 +11,7 @@ namespace Cams
 			string rawDir = Path.Combine(Settings.Path, "raw");
 			string processedDir = Path.Combine(Settings.Path, "processed");
 
-			var cameras = Directory.GetDirectories(rawDir).Select(p => new Camera(p));
+			var cameras = Directory.GetDirectories(rawDir).Select(BuildCamera);
 			foreach (var cam in cameras)
 				cam.Process(processedDir);
 
@@ -20,6 +20,16 @@ namespace Cams
 				date.Summarize();
 
 			Console.ReadKey();
+		}
+
+		static Camera BuildCamera(string path)
+		{
+			bool isAmcrest = File.Exists(Path.Combine(path, "DVRWorkDirectory"));
+
+			if (isAmcrest)
+				return new AmcrestCamera(path);
+
+			return new FoscamCamera(path);
 		}
 	}
 }

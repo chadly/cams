@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Cams
 {
-	public class Camera
+	public abstract class Camera
 	{
 		public string Name { get; private set; }
 		public string RawFilePath { get; private set; }
-		public CameraType Type { get; private set; }
+		public abstract string Type { get; }
 
 		public Camera(string path)
 		{
 			var d = new DirectoryInfo(path);
-
-			bool isAmcrest = File.Exists(Path.Combine(path, "DVRWorkDirectory"));
-
 			Name = Settings.MapCameraName(d.Name);
 			RawFilePath = path;
-			Type = File.Exists(Path.Combine(path, "DVRWorkDirectory")) ? CameraType.Amcrest : CameraType.Foscam;
 		}
 
 		public void Process(string outputDir)
@@ -54,86 +49,14 @@ namespace Cams
 				return false;
 			}
 
-			file.Cleanup();
+			Cleanup(file);
 
 			Console.WriteLine($"Converted {outputFile}");
 			return true;
 		}
 
-		IEnumerable<VideoFile> DiscoverVideoFiles()
-		{
-			switch (Type)
-			{
-				case CameraType.Amcrest:
-					return DiscoverAmcrestFiles();
-
-				case CameraType.Foscam:
-					return DiscoverFoscamFiles();
-			}
-
-			return new VideoFile[0];
-		}
-
-		IEnumerable<VideoFile> DiscoverAmcrestFiles()
-		{
-			var dateDirs = Directory.GetDirectories(RawFilePath);
-
-			foreach (string dateDir in dateDirs)
-			{
-				DateTime date = DateTime.Parse(new DirectoryInfo(dateDir).Name);
-
-				var timeDirs = Directory.GetDirectories(Path.Combine(dateDir, "001", "dav"));
-
-				foreach (string timeDir in timeDirs)
-				{
-					var files = Directory.GetFiles(timeDir, "*.dav");
-
-					foreach (string file in files)
-					{
-						var match = Regex.Match(file, @"(\d{2})\.(\d{2})\.(\d{2})-\d{2}\.\d{2}\.\d{2}");
-						if (!match.Success)
-						{
-							Console.WriteLine($"Filename is in an unexpected format: {file}");
-						}
-						else
-						{
-							int hour = int.Parse(match.Groups[1].Value);
-							int minute = int.Parse(match.Groups[2].Value);
-							int second = int.Parse(match.Groups[3].Value);
-							date = new DateTime(date.Year, date.Month, date.Day, hour, minute, second);
-
-							yield return new AmcrestVideoFile(file, date);
-						}
-					}
-				}
-			}
-		}
-
-		IEnumerable<VideoFile> DiscoverFoscamFiles()
-		{
-			var files = Directory.GetFiles(Path.Combine(RawFilePath, "record"), "*.mkv");
-
-			foreach (string file in files)
-			{
-				var match = Regex.Match(file, @"alarm_(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2}).mkv");
-				if (!match.Success)
-				{
-					Console.WriteLine($"Filename is in an unexpected format: {file}");
-				}
-				else
-				{
-					int year = int.Parse(match.Groups[1].Value);
-					int month = int.Parse(match.Groups[2].Value);
-					int day = int.Parse(match.Groups[3].Value);
-					int hour = int.Parse(match.Groups[4].Value);
-					int minute = int.Parse(match.Groups[5].Value);
-					int second = int.Parse(match.Groups[6].Value);
-					DateTime date = new DateTime(year, month, day, hour, minute, second);
-
-					yield return new FoscamVideoFile(file, date);
-				}
-			}
-		}
+		protected abstract IEnumerable<VideoFile> DiscoverVideoFiles();
+		protected abstract void Cleanup(VideoFile file);
 
 		public override string ToString()
 		{
