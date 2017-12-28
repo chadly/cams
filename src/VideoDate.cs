@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 
 namespace Cams
@@ -84,7 +85,7 @@ namespace Cams
 			{
 				using (var writer = new StreamWriter(summaryFile))
 				{
-					foreach (var file in files)
+					foreach (var file in files.OrderBy(f => f))
 					{
 						writer.WriteLine($"file '{file}'");
 					}
