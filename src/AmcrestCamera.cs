@@ -61,7 +61,8 @@ namespace Cams
 				string dateDir = Path.Combine(timeDir, "..");
 				if (!Directory.GetFileSystemEntries(dateDir).Any())
 				{
-					Directory.Delete(dateDir);
+					//the date directory is actually up two more levels (e.g. 2017-12-27/001/dav/11/whatever.mp4)
+					Directory.Delete(Path.Combine(dateDir, "../../"), true);
 				}
 			}
 		}
