@@ -11,7 +11,7 @@ namespace Cams
 			string rawDir = Path.Combine(Settings.Path, "raw");
 			string processedDir = Path.Combine(Settings.Path, "processed");
 
-			var cameras = Directory.GetDirectories(rawDir).Select(p => Camera.FromPath(p));
+			var cameras = Directory.GetDirectories(rawDir).Select(p => new Camera(p));
 			foreach (var cam in cameras)
 				cam.Process(processedDir);
 
