@@ -43,19 +43,22 @@ namespace Cams
 			string outputDir = new FileInfo(outputFile).DirectoryName;
 			Directory.CreateDirectory(outputDir);
 
+			bool converted = true;
+
 			if (!VideoConverter.CodecCopy(file.FilePath, outputFile))
 			{
-				Console.WriteLine($"Failed to convert {file}");
-				return false;
+				converted = false;
+				FallbackCopy(file, outputFile);
 			}
 
 			Cleanup(file);
 
-			Console.WriteLine($"Converted {outputFile}");
+			Console.WriteLine(converted ? $"Converted {outputFile}" : $"Failed to convert {outputFile}; copied instead");
 			return true;
 		}
 
 		protected abstract IEnumerable<VideoFile> DiscoverVideoFiles();
+		protected abstract void FallbackCopy(VideoFile file, string outputFile);
 		protected abstract void Cleanup(VideoFile file);
 
 		public override string ToString()

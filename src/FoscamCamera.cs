@@ -38,6 +38,14 @@ namespace Cams
 			}
 		}
 
+		protected override void FallbackCopy(VideoFile file, string outputFile)
+		{
+			var outputFileInfo = new FileInfo(outputFile);
+			string newOutputFile = outputFile.Replace(outputFileInfo.Extension, ".mkv");
+
+			File.Copy(file.FilePath, newOutputFile, true);
+		}
+
 		protected override void Cleanup(VideoFile file)
 		{
 			File.Delete(file.FilePath);

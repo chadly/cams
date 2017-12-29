@@ -48,6 +48,17 @@ namespace Cams
 			}
 		}
 
+		protected override void FallbackCopy(VideoFile file, string outputFile)
+		{
+			var outputFileInfo = new FileInfo(outputFile);
+
+			string newOutputFile = outputFile.Replace(outputFileInfo.Extension, ".dav");
+			File.Copy(file.FilePath, newOutputFile, true);
+
+			string newOutputIndex = outputFile.Replace(outputFileInfo.Extension, ".idx");
+			File.Copy(file.FilePath.Replace(".dav", ".idx"), newOutputIndex, true);
+		}
+
 		protected override void Cleanup(VideoFile file)
 		{
 			File.Delete(file.FilePath);
