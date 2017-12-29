@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 
 namespace Cams
 {
@@ -40,10 +40,10 @@ namespace Cams
 						string summaryFile = Path.Combine(camDir, "summary.txt");
 						string tmpMergedFile = Path.Combine(DirPath, $"{camName}-tmp.mp4");
 
+						Console.WriteLine($"Summarizing {camName} for {Date.ToString("yyyy-MM-dd")}");
+
 						if (CreateSummaryFile(camDir, summaryFile))
 						{
-							Console.WriteLine($"Summarizing {camName} for {Date.ToString("yyyy-MM-dd")}");
-
 							if (MergeFilesForSummary(camName, summaryFile, tmpMergedFile))
 							{
 								if (FastForwardSummaryFile(camName, tmpMergedFile, outputFile))
@@ -77,15 +77,22 @@ namespace Cams
 
 		bool CreateSummaryFile(string camDir, string summaryFilePath)
 		{
-			var files = Directory.GetFiles(camDir, "*.mp4");
+			var files = Directory.GetFiles(camDir, "*.mp4")
+				.Where(f => VideoConverter.CheckValidVideoFile(f))
+				.OrderBy(f => f)
+				.ToArray();
+
 			if (files.Length < 2)
+			{
+				Console.WriteLine($"Nothing to summarize for {camDir}");
 				return false;
+			}
 
 			using (var summaryFile = File.Open(summaryFilePath, FileMode.Create, FileAccess.Write))
 			{
 				using (var writer = new StreamWriter(summaryFile))
 				{
-					foreach (var file in files.OrderBy(f => f))
+					foreach (var file in files)
 					{
 						writer.WriteLine($"file '{file}'");
 					}
