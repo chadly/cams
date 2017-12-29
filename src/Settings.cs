@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
 namespace Cams
@@ -9,8 +10,11 @@ namespace Cams
 
 		static Settings()
 		{
+			string dll = Assembly.GetExecutingAssembly().Location;
+			string dir = new FileInfo(dll).DirectoryName;
+
 			config = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory())
+				.SetBasePath(dir)
 				.AddJsonFile("settings.json", optional: true)
 				.Build();
 		}
