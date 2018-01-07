@@ -20,6 +20,8 @@ namespace Cams
 				date.Summarize();
 
 #if DEBUG
+			Console.WriteLine();
+			Console.WriteLine("Press any key to exit");
 			Console.ReadKey();
 #endif
 		}
