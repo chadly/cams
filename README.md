@@ -4,7 +4,18 @@
 
 I run this app every 30 minutes on a small ubuntu server running on some extra hardware I had lying around. I have [Foscam](https://foscam.com/) & [Amcrest](https://amcrest.com/) cameras that record video to the server via FTP whenever they detect motion. The cameras dump everything into the `raw` folder. The app processes & moves the raw footage to date-specific folders.
 
-## Post-Processing Video
+## Installation
+
+Make sure you have [ffmpeg](https://www.ffmpeg.org/) installed. Download the binaries for your OS (either Ubuntu or Windows) for [the latest release](https://github.com/chadly/cams/releases/latest) and copy it somewhere appropriate (`/opt/cams` on Ubuntu). Update the `settings.json` with the path to your camera directory (see below). From there, you can run `cams` and set it up to run automatically as a cron job:
+
+```
+# m	h	dom	dow	command
+30	*	*	*	/opt/cams/cams
+```
+
+This will run the app once an hour at the 30 minute mark.
+
+## How it Works
 
 The cameras like to dump video onto the FTP server using an esoteric path and filename. e.g. my front door camera will dump video to the following path `FI9805E_C4D65535806E/record/alarm_20151018_093118.mkv` and the firmware has no way to change that. When you get more than a handful of motion events a day from more than a couple of cameras, this system quickly becomes unmanageable. The app processes the videos and make them...better.
 
@@ -21,25 +32,6 @@ The app then will merge all the separate video clips for the day into one video 
 ### Clear Old Videos
 
 The app then will clear out any video folders older than 90 days (see `settings.json`).
-
-## Deployment
-
-Clone this repo and run the following:
-
-```
-dotnet build -c Release
-```
-
-Copy the generated `bin/Release/netcoreapp2.0` folder to the server you want to run it on (e.g. in `/opt/cams`).
-
-Make sure you have [ffmpeg](https://www.ffmpeg.org/) & [dotnet core](https://www.microsoft.com/net/learn/get-started/) installed. Setup a crontab to run the app every so often:
-
-```
-# m	h	dom	dow	command
-30	*	*	*	dotnet /opt/cams/cams.dll
-```
-
-This will run the app once an hour at the 30 minute mark.
 
 ## Viewing the Recordings
 
