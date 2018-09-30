@@ -3,12 +3,9 @@
   "minutesToWaitBeforeProcessing": 5,
   "daysToKeep": 90,
   "mappings": {
-    "FI9805E_C4D65535806E": "front-yard",
-    "FI9805EP_00626E537967": "driveway",
-    "FI9805EP_00626E537A4F": "backyard",
-    "FI9805EP_C4D6553B70B1": "backdoor",
     "FI9821P_00626E58BD75": "kitchen",
-    "FI9821W_00626E52CB67": "baby-monitor",
-    "FI9821W_00626E52CB82": "garage"
+    "FI9821W_00626E52CB67": "playroom",
+    "FI9821W_00626E52CB82": "garage",
+    "AMC0082A_49CA49": "backyard"
   }
 }
