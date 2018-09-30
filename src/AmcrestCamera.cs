@@ -34,7 +34,7 @@ namespace Cams
 
 					if (Directory.Exists(mp4dir))
 					{
-						files = Directory.GetFiles(mp4dir, "*.mp4");
+						files = GetMp4AndDavVideoFilesInPath(mp4dir);
 					}
 					else if (Directory.Exists(davdir))
 					{
@@ -43,7 +43,7 @@ namespace Cams
 						files = new List<string>();
 						foreach (string anotherSubdir in moreDamnSubdirs)
 						{
-							((List<string>)files).AddRange(Directory.GetFiles(anotherSubdir, "*.dav"));
+							((List<string>)files).AddRange(GetMp4AndDavVideoFilesInPath(anotherSubdir));
 						}
 					}
 
@@ -55,6 +55,16 @@ namespace Cams
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Amcrest mixes and matches dav files and mp4 files in whatever subdirectory they damn well feel like it.
+		/// </summary>
+		IEnumerable<string> GetMp4AndDavVideoFilesInPath(string dir)
+		{
+			var davFiles = Directory.GetFiles(dir, "*.dav");
+			var mp4Files = Directory.GetFiles(dir, "*.mp4");
+			return davFiles.Union(mp4Files);
 		}
 
 		VideoFile ProcessFile(DateTime date, string file)
