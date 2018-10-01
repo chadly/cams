@@ -1,30 +1,31 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Cams
 {
 	public static class VideoConverter
 	{
-		public static bool CodecCopy(string inputFile, string outputFile)
+		public static Task<bool> CodecCopy(string inputFile, string outputFile)
 		{
 			return Run($"-y -i {inputFile} -codec copy {outputFile}");
 		}
 
-		public static bool Concat(string listFilePath, string outputFile)
+		public static Task<bool> Concat(string listFilePath, string outputFile)
 		{
 			return Run($"-y -safe 0 -f concat -i {listFilePath} -c copy {outputFile}");
 		}
 
-		public static bool FastForward(string inputFile, string outputFile)
+		public static Task<bool> FastForward(string inputFile, string outputFile)
 		{
 			return Run($"-y -i {inputFile} -filter:v \"setpts = 0.01 * PTS\" -an {outputFile}");
 		}
 
-		public static bool CheckValidVideoFile(string inputFile)
+		public static Task<bool> CheckValidVideoFile(string inputFile)
 		{
 			return Run($"-v error -i {inputFile} -f null -");
 		}
 
-		static bool Run(string args)
+		static async Task<bool> Run(string args)
 		{
 			using (var process = new Process
 			{
@@ -37,7 +38,7 @@ namespace Cams
 			})
 			{
 				process.Start();
-				process.WaitForExit();
+				await process.WaitForExitAsync();
 
 				return process.ExitCode == 0;
 			}

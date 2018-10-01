@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Cams
 {
@@ -15,7 +17,7 @@ namespace Cams
 			DirPath = path;
 		}
 
-		public void Summarize()
+		public async Task Summarize()
 		{
 			if (DeleteIfOld())
 				return;
@@ -42,11 +44,11 @@ namespace Cams
 
 						Console.WriteLine($"Summarizing {camName} for {Date.ToString("yyyy-MM-dd")}");
 
-						if (CreateSummaryFile(camDir, summaryFile))
+						if (await CreateSummaryFile(camDir, summaryFile))
 						{
-							if (MergeFilesForSummary(camName, summaryFile, tmpMergedFile))
+							if (await MergeFilesForSummary(camName, summaryFile, tmpMergedFile))
 							{
-								if (FastForwardSummaryFile(camName, tmpMergedFile, outputFile))
+								if (await FastForwardSummaryFile(camName, tmpMergedFile, outputFile))
 								{
 									Console.WriteLine($"Summarized {outputFile}");
 								}
@@ -75,16 +77,17 @@ namespace Cams
 			return false;
 		}
 
-		bool CreateSummaryFile(string camDir, string summaryFilePath)
+		async Task<bool> CreateSummaryFile(string camDir, string summaryFilePath)
 		{
-			var files = Directory.GetFiles(camDir, "*.mp4")
-				.Where(f =>
-				{
-					Console.Write($"Checking {new FileInfo(f).Name} for validity...");
-					bool result = VideoConverter.CheckValidVideoFile(f);
-					Console.WriteLine(result ? "Valid" : "Invalid");
-					return result;
-				})
+			//https://stackoverflow.com/questions/10806951/how-to-limit-the-amount-of-concurrent-async-i-o-operations
+
+			var calcValidFiles = new List<Task<FileValidity>>();
+			foreach (var file in Directory.GetFiles(camDir, "*.mp4"))
+				calcValidFiles.Add(CalculateFileValidity(file));
+
+			var files = (await Task.WhenAll(calcValidFiles))
+				.Where(f => f.IsValid)
+				.Select(f => f.FilePath)
 				.OrderBy(f => f)
 				.ToArray();
 
@@ -100,7 +103,7 @@ namespace Cams
 				{
 					foreach (var file in files)
 					{
-						writer.WriteLine($"file '{file}'");
+						await writer.WriteLineAsync($"file '{file}'");
 					}
 				}
 			}
@@ -108,9 +111,29 @@ namespace Cams
 			return true;
 		}
 
-		bool MergeFilesForSummary(string camName, string summaryFile, string outputFile)
+		async Task<FileValidity> CalculateFileValidity(string file)
 		{
-			if (!VideoConverter.Concat(summaryFile, outputFile))
+			var info = new FileInfo(file);
+			Console.WriteLine($"Checking {info.Name} for validity...");
+			bool isValid = await VideoConverter.CheckValidVideoFile(file);
+			Console.WriteLine(isValid ? $"{info.Name} Valid" : $"{info.Name} Invalid");
+
+			return new FileValidity
+			{
+				FilePath = file,
+				IsValid = isValid
+			};
+		}
+
+		class FileValidity
+		{
+			public string FilePath { get; set; }
+			public bool IsValid { get; set; }
+		}
+
+		async Task<bool> MergeFilesForSummary(string camName, string summaryFile, string outputFile)
+		{
+			if (!await VideoConverter.Concat(summaryFile, outputFile))
 			{
 				Console.WriteLine($"Failed to summarize {camName} for {Date.ToString("yyyy-MM-dd")}");
 				return false;
@@ -119,9 +142,9 @@ namespace Cams
 			return true;
 		}
 
-		bool FastForwardSummaryFile(string camName, string mergedFile, string outputFile)
+		async Task<bool> FastForwardSummaryFile(string camName, string mergedFile, string outputFile)
 		{
-			if (!VideoConverter.FastForward(mergedFile, outputFile))
+			if (!await VideoConverter.FastForward(mergedFile, outputFile))
 			{
 				Console.WriteLine($"Failed to summarize {camName} for {Date.ToString("yyyy-MM-dd")}");
 				return false;

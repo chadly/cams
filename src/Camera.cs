@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Cams
 {
@@ -17,19 +18,23 @@ namespace Cams
 			RawFilePath = path;
 		}
 
-		public void Process(string outputDir)
+		public async Task Process(string outputDir)
 		{
 			Console.WriteLine($"{Name} ({Type}): {RawFilePath}");
 
 			var files = DiscoverVideoFiles();
 
+			var tasks = new List<Task>();
+
 			foreach (var file in files)
-				ProcessFile(file, outputDir);
+				tasks.Add(ProcessFile(file, outputDir));
+
+			await Task.WhenAll(tasks);
 
 			Console.WriteLine();
 		}
 
-		bool ProcessFile(VideoFile file, string outputBase)
+		async Task<bool> ProcessFile(VideoFile file, string outputBase)
 		{
 			DateTime threshold = DateTime.Now.AddMinutes(Settings.MinutesToWaitBeforeProcessing);
 
@@ -45,7 +50,7 @@ namespace Cams
 
 			bool converted = true;
 
-			if (!VideoConverter.CodecCopy(file.FilePath, outputFile))
+			if (!await VideoConverter.CodecCopy(file.FilePath, outputFile))
 			{
 				converted = false;
 				FallbackCopy(file, outputFile);

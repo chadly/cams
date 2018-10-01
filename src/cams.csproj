@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://github.com/chadly/cams</PackageProjectUrl>
     <RepositoryUrl>https://github.com/chadly/cams.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
