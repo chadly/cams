@@ -78,13 +78,6 @@ namespace Cams
 		bool CreateSummaryFile(string camDir, string summaryFilePath)
 		{
 			var files = Directory.GetFiles(camDir, "*.mp4")
-				.Where(f =>
-				{
-					Console.Write($"Checking {new FileInfo(f).Name} for validity...");
-					bool result = VideoConverter.CheckValidVideoFile(f);
-					Console.WriteLine(result ? "Valid" : "Invalid");
-					return result;
-				})
 				.OrderBy(f => f)
 				.ToArray();
 

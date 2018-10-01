@@ -1,5 +1,5 @@
 ﻿{
-  "path": "D:\\dev\\cams\\testdata",
+  "path": "C:\\dev\\cams\\testdata",
   "minutesToWaitBeforeProcessing": 5,
   "daysToKeep": 90,
   "mappings": {
