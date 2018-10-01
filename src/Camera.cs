@@ -35,7 +35,7 @@ namespace Cams
 
 			if (file.Date >= threshold)
 			{
-				Console.WriteLine($"File was written less than five minutes ago: {file.FilePath}");
+				Console.WriteLine($"File was written less than {Settings.MinutesToWaitBeforeProcessing} minutes ago: {file.FilePath}");
 				return false;
 			}
 
