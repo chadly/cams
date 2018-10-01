@@ -49,8 +49,11 @@ namespace Cams
 
 			if (file.HasExtension(CONVERT_FOOTAGE_FORMAT))
 			{
-				//save some time & just copy the file rather than going through ffmpeg
-				File.Copy(file.FilePath, outputFile, true);
+				//clear if it already exists for some reason (previous process run failed?)
+				File.Delete(outputFile);
+
+				//save some time & just move the file directly rather than going through ffmpeg
+				File.Move(file.FilePath, outputFile);
 			}
 			else if (!VideoConverter.CodecCopy(file.FilePath, outputFile))
 			{
