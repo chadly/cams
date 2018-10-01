@@ -6,6 +6,8 @@ namespace Cams
 {
 	public abstract class Camera
 	{
+		const string CONVERT_FOOTAGE_FORMAT = "mp4";
+
 		public string Name { get; private set; }
 		public string RawFilePath { get; private set; }
 		public abstract string Type { get; }
@@ -39,13 +41,18 @@ namespace Cams
 				return false;
 			}
 
-			string outputFile = Path.Combine(outputBase, file.Date.ToString("yyyy-MM-dd"), Name, $"{file.Date.ToString("HH-mm-ss")}.mp4");
+			string outputFile = Path.Combine(outputBase, file.Date.ToString("yyyy-MM-dd"), Name, $"{file.Date.ToString("HH-mm-ss")}.{CONVERT_FOOTAGE_FORMAT}");
 			string outputDir = new FileInfo(outputFile).DirectoryName;
 			Directory.CreateDirectory(outputDir);
 
 			bool converted = true;
 
-			if (!VideoConverter.CodecCopy(file.FilePath, outputFile))
+			if (file.HasExtension(CONVERT_FOOTAGE_FORMAT))
+			{
+				//save some time & just copy the file rather than going through ffmpeg
+				File.Copy(file.FilePath, outputFile, true);
+			}
+			else if (!VideoConverter.CodecCopy(file.FilePath, outputFile))
 			{
 				converted = false;
 				FallbackCopy(file, outputFile);

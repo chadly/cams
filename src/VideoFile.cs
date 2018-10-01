@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Cams
 {
@@ -24,6 +25,15 @@ namespace Cams
 		{
 			FilePath = path;
 			Date = date;
+		}
+
+		public bool HasExtension(string extension)
+		{
+			if (string.IsNullOrWhiteSpace(extension))
+				return false;
+
+			string actual = Info.Name.Split('.').Last();
+			return extension.Equals(actual, StringComparison.CurrentCultureIgnoreCase);
 		}
 
 		public override string ToString()
