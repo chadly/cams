@@ -16,7 +16,7 @@ namespace Cams
 
 		public static bool FastForward(string inputFile, string outputFile)
 		{
-			return Run($"-y -i {inputFile} -filter:v \"setpts = 0.01 * PTS\" -an {outputFile}");
+			return Run($"-y -i {inputFile} -filter:v \"setpts=0.01*PTS, scale=-1:720\" -an {outputFile}");
 		}
 
 		public static bool CheckValidVideoFile(string inputFile)
@@ -30,7 +30,6 @@ namespace Cams
 			{
 				StartInfo = new ProcessStartInfo
 				{
-					CreateNoWindow = true,
 					FileName = "ffmpeg",
 					Arguments = args
 				}
